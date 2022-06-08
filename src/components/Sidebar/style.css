@@ -1,0 +1,32 @@
+.sidebar--nivel {
+  margin-top: 20px;
+}
+
+.sidebar--perletivoinicial {
+  margin-top: 20px;
+}
+
+.sidebar--qtdalunos {
+  margin-top: 20px;
+}
+
+.sidebar--sitmatricula {
+  margin-top: 20px;
+}
+
+.sidebar--sitperiodo {
+  margin-top: 20px;
+}
+
+.sidebar--idade {
+  margin-top: 20px;
+}
+
+label {
+  color:white;
+  margin-right: 10px;
+}
+
+h3 {
+  color: white;
+}

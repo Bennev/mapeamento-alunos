@@ -1,0 +1,9 @@
+main {
+    display: flex;
+
+}
+main > div {
+    margin: 20px;
+    width: 50%;
+    height: 850px;   
+}
