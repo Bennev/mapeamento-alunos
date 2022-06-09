@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
 import campusData from '../../campusData'
-import alunosDataAjustado from '../../alunosDataAjustado.json'
 import perfilAlunos from '../../perfilAlunos.json'
 
 export default function Sidebar({ campus, setCampus }) {
   const [perfil, setPerfil] = useState()
   const [nivel, setNivel] = useState()
-  const [perletivoinicial,setPeriodoLetivoInicial] = useState()
+  const [perletivoinicial, setPeriodoLetivoInicial] = useState()
   const [sitmatricula, setSituacaoMatricula] = useState()
   const [sitperiodo, setSituacaoPeriodo] = useState()
   const [idade, setIdade] = useState()
@@ -65,7 +64,7 @@ export default function Sidebar({ campus, setCampus }) {
     const filtros = {
       campus: campus,
       nivel: nivel,
-      
+
       perfil: perfil,
       perletivoinicial: perletivoinicial,
       sitmatricula: sitmatricula,
@@ -73,7 +72,7 @@ export default function Sidebar({ campus, setCampus }) {
       idade: idade,
     }
 
-     console.log(filtros)
+    console.log(filtros)
   }
 
   return (
@@ -87,7 +86,7 @@ export default function Sidebar({ campus, setCampus }) {
           })}
         </select>
       </div>
-      
+
       <div className="sidebar--perfil">
         <label>Perfil do Aluno:</label>
         <select id="perfil" value={perfil} onChange={update => setPerfil(update.target.value)}>
