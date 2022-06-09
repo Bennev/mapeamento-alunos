@@ -31,6 +31,7 @@ export default function Sidebar({ campus, setCampus, campusList }) {
   const [curso, setCurso] = useState()
 
   const [alunos, setAlunos] = useState([])
+  const [realizouPesquisa, setRealizouPesquisa] = useState(false)
 
   useEffect(() => {
     api.get('/curso').then(res => setCursos(res.data))
@@ -68,7 +69,10 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       filtros['situacaoPeriodo'] = parseInt(sitperiodo)
     }
 
-    api.get('/aluno', { params: filtros }).then(r => setAlunos(r.data))
+    api.get('/aluno', { params: filtros }).then(r => {
+      setAlunos(r.data)
+      setRealizouPesquisa(true)
+    })
   }
 
   return (
@@ -143,6 +147,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
         </select>
       </div>
       <button onClick={buscarResultado}>Buscar dados</button>
+      {realizouPesquisa ? (
+        <h2>Quantidade de Alunos: {alunos.length}</h2>
+      ) : null}
     </div>
   )
 }
