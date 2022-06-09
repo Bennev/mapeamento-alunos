@@ -1,71 +1,51 @@
-import React, { useEffect, useState } from 'react'
 import './style.css'
-import campusData from '../../campusData'
-import perfilAlunos from '../../perfilAlunos.json'
 
-export default function Sidebar({ campus, setCampus }) {
-  const [perfil, setPerfil] = useState()
+import React, { useEffect, useState } from 'react'
+
+import api from '../../api'
+
+export default function Sidebar({ campus, setCampus, campusList }) {
+  const [cotas, setCotas] = useState([])
+  const [cota, setCota] = useState()
+
+  const [niveis, setNiveis] = useState([])
   const [nivel, setNivel] = useState()
+
+  const [perletivoiniciais, setPeriodoLetivoIniciais] = useState([])
   const [perletivoinicial, setPeriodoLetivoInicial] = useState()
+
+  const [sitmatriculas, setSituacaoMatriculas] = useState([])
   const [sitmatricula, setSituacaoMatricula] = useState()
+
+  const [sitperiodos, setSituacaoPeriodos] = useState([])
   const [sitperiodo, setSituacaoPeriodo] = useState()
+
+  const [idades, setIdades] = useState([])
   const [idade, setIdade] = useState()
 
-  const nivelRegimeEnsino = [
-    'Licenciatura',
-    'Bacharelado',
-    'Subsequente',
-    'Tecnologia',
-    'Mestrado',
-    'Integrado',
-    'Concomitante'
-  ]
+  const [cursos, setCursos] = useState([]) // coisas diferente, a gente vai pegar os dados da api e guardar em um state
+  const [curso, setCurso] = useState() // aqui a gente guarda o valor selecionado no momento, sim sim, pra gente usar dps
 
-  const periodoLetivoInicial = [
-    '2020/1',
-    '2020/2',
-    '2021/1'
-  ]
-
-  const situacaoMatricula = [
-    'Trancado',
-    'Matriculado',
-    'Cancelado Compulsoriamente',
-    'Cancelado Voluntariamente',
-    'Vínculo Institucional',
-    'Transferido Externo',
-    'Abandono',
-    'Falecido',
-    'Transferido Interno',
-    'Concluído',
-    'Concludente'
-  ]
-
-  const situacaoPeriodo = [
-    'Fechado c/ Pendência',
-    'Aprovado',
-    'Matriculado',
-    'Aprovado Parcialmente',
-    'Reprovado',
-    'Rep. Falta',
-    'Cancelou Compulsório',
-    'Cancelou',
-    'Aprov. c/Dependência',
-    'Trancou',
-    'Falecido',
-    'Em Aberto',
-    'Pediu Transf. Externa',
-    'Transferido Interno',
-    'Abandonou',
-    'Pediu Vínculo Institucional'
-  ]
+  useEffect(() => {
+    // lembra que eu disse que se eu colocar um useEffect com o array de dependencias vazio ele só vai entneder que é pra rodar no começo quando componente for renderizar? show, pois bora fazer um teste buscando dados da api, aqui eu vou buscar dados dos cursos, show dms
+    api.get('/curso').then(res => setCursos(res.data))
+    api.get('/cota').then(res => setCotas(res.data))
+    //url tá errada, camel case
+    api.get('/situacaoMatricula').then(res => setSituacaoMatriculas(res.data))
+    api.get('/situacaoPeriodo').then(res => setSituacaoPeriodos(res.data))
+    // faltou aqui pronto, bora testar por enquanto
+    // entao falta trazermos os niveis e os campus
+    // sim sim, bora fazer dos dois acima primeiro
+    // como são enums, é bem mais fácil de lidar
+    api.get('/aluno/nivel').then(res => setNiveis(res.data))
+  }, [])
 
   const buscarResultado = () => {
     const filtros = {
       campus: campus,
       nivel: nivel,
 
-      perfil: perfil,
+      cota: cota,
       perletivoinicial: perletivoinicial,
       sitmatricula: sitmatricula,
       sitperiodo: sitperiodo,
@@ -77,69 +57,79 @@ export default function Sidebar({ campus, setCampus }) {
 
   return (
     <div className="sidebar--container">
-      <div className="sidebar--campus">
-        <label>Campus:</label>
-        <select value={campus} onChange={update => setCampus(update.target.value)}>
+      <div className="sidebar--curso">
+        <label>Curso:</label>
+        <select id="curso" value={curso} onChange={c => setCurso(c.target.value)}>
           <option>--Selecione uma opção--</option>
-          {campusData.map((item, index) => {
-            return <option key={index} value={item.campusCompleto}>{item.campus}</option>
+          {cursos.map((item, index) => {
+            return <option key={index}>{item.nome}</option>
           })}
         </select>
       </div>
 
-      <div className="sidebar--perfil">
-        <label>Perfil do Aluno:</label>
-        <select id="perfil" value={perfil} onChange={update => setPerfil(update.target.value)}>
+      <div className="sidebar--campus">
+        <label>Campus:</label>
+        <select value={campus} onChange={ca => setCampus(ca.target.value)}>
           <option>--Selecione uma opção--</option>
-          {perfilAlunos.map((item, index) => {
-            return <option key={index}>{item}</option>
+          {campusList.map((item, index) => { // COMO FICA AQUI? NOS DOIS?
+            return <option key={index} value={item.slug}>{item.nome}</option>
+          })}
+        </select>
+      </div>
+
+      <div className="sidebar--cota">
+        <label>Perfil do Aluno:</label>
+        <select id="cota" value={cota} onChange={co => setCota(co.target.value)}>
+          <option>--Selecione uma opção--</option>
+          {cotas.map((item, index) => {
+            return <option key={index}>{item.nome}</option>
           })}
         </select>
       </div>
 
       <div className="sidebar--nivel">
         <label>Nivel:</label>
-        <select id="nivel" value={nivel} onChange={update => setNivel(update.target.value)}>
+        <select id="nivel" value={nivel} onChange={n => setNivel(n.target.value)}>
           <option>--Selecione uma opção--</option>
-          {nivelRegimeEnsino.map((item, index) => {
-            return <option key={index}>{item}</option>
+          {niveis.map((item, index) => {
+            return <option key={index}>{item}</option> // enum n é um objeto, é o valor em si
           })}
         </select>
       </div>
 
       <div className="sidebar--perletivoinicial">
         <label>Período Letivo Inicial: </label>
-        <select id="perletivoinicial" value={perletivoinicial} onChange={update => setPeriodoLetivoInicial(update.target.value)}>
+        <select id="perletivoinicial" value={perletivoinicial} onChange={pli => setPeriodoLetivoInicial(pli.target.value)}>
           <option>--Selecione uma opção--</option>
-          {periodoLetivoInicial.map((item, index) => {
-            return <option key={index}>{item}</option>
+          {perletivoiniciais.map((item, index) => {
+            return <option key={index}>{item.nome}</option>
           })}
         </select>
       </div>
 
       <div className="sidebar--sitmatricula">
         <label>Situação Matrícula:</label>
-        <select id="sitmatricula" value={sitmatricula} onChange={update => setSituacaoMatricula(update.target.value)}>
+        <select id="sitmatricula" value={sitmatricula} onChange={sm => setSituacaoMatricula(sm.target.value)}>
           <option>--Selecione uma opção--</option>
-          {situacaoMatricula.map((item, index) => {
-            return <option key={index}>{item}</option>
+          {sitmatriculas.map((item, index) => {
+            return <option key={index}>{item.nome}</option>
           })}
         </select>
       </div>
 
       <div className="sidebar--sitperiodo">
         <label>Situação Período:</label>
-        <select id="sitperiodo" value={sitperiodo} onChange={update => setSituacaoPeriodo(update.target.value)}>
+        <select id="sitperiodo" value={sitperiodo} onChange={sp => setSituacaoPeriodo(sp.target.value)}>
           <option>--Selecione uma opção--</option>
-          {situacaoPeriodo.map((item, index) => {
-            return <option key={index}>{item}</option>
+          {sitperiodos.map((item, index) => {
+            return <option key={index}>{item.nome}</option>
           })}
         </select>
       </div>
 
       <div className="sidebar--idade">
         <label>Idade:</label>
-        <select id="idade" value={idade} onChange={update => setIdade(update.target.value)}>
+        <select id="idade" value={idade} onChange={i => setIdade(i.target.value)}>
           <option>--Selecione uma opção--</option>
           <option>23 anos ou menos</option>
           <option>De 24 à 29 anos</option>
@@ -147,19 +137,6 @@ export default function Sidebar({ campus, setCampus }) {
           <option>37 anos ou mais</option>
 
         </select>
-      </div>
-
-      <div className="sidebar--qtdalunos">
-        <label>Quantidade de Alunos:</label>
-        <h3>{campus}</h3>
-        <h3>{perfil}</h3>
-        <h3>{nivel}</h3>
-        <h3>{perletivoinicial}</h3>
-        <h3>{sitmatricula}</h3>
-        <h3>{sitperiodo}</h3>
-        <h3>{idade}</h3>
-        <button onClick={buscarResultado}>Teste:</button>
-
       </div>
     </div>
   )

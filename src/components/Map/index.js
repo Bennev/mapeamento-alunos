@@ -1,13 +1,14 @@
-import React from 'react'
 import './style.css'
-import campusData from '../../campusData'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+
 import L from 'leaflet'
+import React from 'react'
 import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 
-export default function Map({ setCampus }) {
+export default function Map({ setCampus, campusList }) {
   let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow
@@ -25,19 +26,19 @@ export default function Map({ setCampus }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {campusData.map((item, index) => {
+      {campusList.map((item, index) => {
         return (
           <Marker
             eventHandlers={{
               click: () => {
-                setCampus(item.campusCompleto)
+                setCampus(item.slug)
               }
             }}
             key={index}
-            position={[item.lat, item.long]}
+            position={[item.lat, item.lng]}
           >
             <Popup>
-              {item.campus}
+              {item.nome}
             </Popup>
           </Marker>
         )
