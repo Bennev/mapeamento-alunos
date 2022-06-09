@@ -13,7 +13,7 @@ export default function Main() {
   useEffect(() => {
     api.get("/campus").then(res =>
       setCampusList(res.data)
-    ) // se bem que, vamos fazer algo diferente aqui, nao agora pq eu vou almocar, mas 13h quando eu voltar vamos criar uma tabela pro campus, ele vai deixar de se rum enum pois ow, vou sair aqui, volto mais tarde, 13h viu?
+    )
   }, [])
 
   return (

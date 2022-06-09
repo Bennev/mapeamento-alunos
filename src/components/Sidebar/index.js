@@ -11,7 +11,11 @@ export default function Sidebar({ campus, setCampus, campusList }) {
   const [niveis, setNiveis] = useState([])
   const [nivel, setNivel] = useState()
 
-  const [perletivoiniciais, setPeriodoLetivoIniciais] = useState([])
+  const [perletivoiniciais, setPeriodoLetivoIniciais] = useState([
+    '2020/1',
+    '2020/2',
+    '2021/1'
+  ])
   const [perletivoinicial, setPeriodoLetivoInicial] = useState()
 
   const [sitmatriculas, setSituacaoMatriculas] = useState([])
@@ -23,36 +27,48 @@ export default function Sidebar({ campus, setCampus, campusList }) {
   const [idades, setIdades] = useState([])
   const [idade, setIdade] = useState()
 
-  const [cursos, setCursos] = useState([]) // coisas diferente, a gente vai pegar os dados da api e guardar em um state
-  const [curso, setCurso] = useState() // aqui a gente guarda o valor selecionado no momento, sim sim, pra gente usar dps
+  const [cursos, setCursos] = useState([])
+  const [curso, setCurso] = useState()
+
+  const [alunos, setAlunos] = useState([])
 
   useEffect(() => {
-    // lembra que eu disse que se eu colocar um useEffect com o array de dependencias vazio ele só vai entneder que é pra rodar no começo quando componente for renderizar? show, pois bora fazer um teste buscando dados da api, aqui eu vou buscar dados dos cursos, show dms
     api.get('/curso').then(res => setCursos(res.data))
     api.get('/cota').then(res => setCotas(res.data))
-    //url tá errada, camel case
     api.get('/situacaoMatricula').then(res => setSituacaoMatriculas(res.data))
     api.get('/situacaoPeriodo').then(res => setSituacaoPeriodos(res.data))
-    // faltou aqui pronto, bora testar por enquanto
-    // entao falta trazermos os niveis e os campus
-    // sim sim, bora fazer dos dois acima primeiro
-    // como são enums, é bem mais fácil de lidar
     api.get('/aluno/nivel').then(res => setNiveis(res.data))
   }, [])
 
-  const buscarResultado = () => {
-    const filtros = {
-      campus: campus,
-      nivel: nivel,
+  useEffect(() => {
+    console.log(alunos)
+  }, [alunos])
 
-      cota: cota,
-      perletivoinicial: perletivoinicial,
-      sitmatricula: sitmatricula,
-      sitperiodo: sitperiodo,
-      idade: idade,
+  const buscarResultado = () => {
+    const filtros = {}
+    if (parseInt(campus)) {
+      filtros['campus'] = parseInt(campus)
+    }
+    if (parseInt(cota)) {
+      filtros['cota'] = parseInt(cota)
+    }
+    if (parseInt(curso)) {
+      filtros['curso'] = parseInt(curso)
+    }
+    if (perletivoinicial !== '--Selecione uma opção--') {
+      filtros['periodoLetivo'] = perletivoinicial
+    }
+    if (nivel !== '--Selecione uma opção--') {
+      filtros['nivel'] = nivel
+    }
+    if (parseInt(sitmatricula)) {
+      filtros['situacaoMatricula'] = parseInt(sitmatricula)
+    }
+    if (parseInt(sitperiodo)) {
+      filtros['situacaoPeriodo'] = parseInt(sitperiodo)
     }
 
-    console.log(filtros)
+    api.get('/aluno', { params: filtros }).then(r => setAlunos(r.data))
   }
 
   return (
@@ -60,9 +76,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--curso">
         <label>Curso:</label>
         <select id="curso" value={curso} onChange={c => setCurso(c.target.value)}>
-          <option>--Selecione uma opção--</option>
+          <option value={0}>--Selecione uma opção--</option>
           {cursos.map((item, index) => {
-            return <option key={index}>{item.nome}</option>
+            return <option key={index} value={item.id}>{item.nome}</option>
           })}
         </select>
       </div>
@@ -70,9 +86,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--campus">
         <label>Campus:</label>
         <select value={campus} onChange={ca => setCampus(ca.target.value)}>
-          <option>--Selecione uma opção--</option>
-          {campusList.map((item, index) => { // COMO FICA AQUI? NOS DOIS?
-            return <option key={index} value={item.slug}>{item.nome}</option>
+          <option value={0}>--Selecione uma opção--</option>
+          {campusList.map((item, index) => {
+            return <option key={index} value={item.id}>{item.nome}</option>
           })}
         </select>
       </div>
@@ -80,9 +96,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--cota">
         <label>Perfil do Aluno:</label>
         <select id="cota" value={cota} onChange={co => setCota(co.target.value)}>
-          <option>--Selecione uma opção--</option>
+          <option value={0}>--Selecione uma opção--</option>
           {cotas.map((item, index) => {
-            return <option key={index}>{item.nome}</option>
+            return <option key={index} value={item.id}>{item.nome}</option>
           })}
         </select>
       </div>
@@ -90,9 +106,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--nivel">
         <label>Nivel:</label>
         <select id="nivel" value={nivel} onChange={n => setNivel(n.target.value)}>
-          <option>--Selecione uma opção--</option>
+          <option value={"--Selecione uma opção--"}>--Selecione uma opção--</option>
           {niveis.map((item, index) => {
-            return <option key={index}>{item}</option> // enum n é um objeto, é o valor em si
+            return <option key={index} value={item}>{item}</option>
           })}
         </select>
       </div>
@@ -100,9 +116,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--perletivoinicial">
         <label>Período Letivo Inicial: </label>
         <select id="perletivoinicial" value={perletivoinicial} onChange={pli => setPeriodoLetivoInicial(pli.target.value)}>
-          <option>--Selecione uma opção--</option>
+          <option value={"--Selecione uma opção--"}>--Selecione uma opção--</option>
           {perletivoiniciais.map((item, index) => {
-            return <option key={index}>{item.nome}</option>
+            return <option key={index} value={item}>{item}</option>
           })}
         </select>
       </div>
@@ -110,9 +126,9 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--sitmatricula">
         <label>Situação Matrícula:</label>
         <select id="sitmatricula" value={sitmatricula} onChange={sm => setSituacaoMatricula(sm.target.value)}>
-          <option>--Selecione uma opção--</option>
+          <option value={0}>--Selecione uma opção--</option>
           {sitmatriculas.map((item, index) => {
-            return <option key={index}>{item.nome}</option>
+            return <option key={index} value={item.id}>{item.nome}</option>
           })}
         </select>
       </div>
@@ -120,24 +136,13 @@ export default function Sidebar({ campus, setCampus, campusList }) {
       <div className="sidebar--sitperiodo">
         <label>Situação Período:</label>
         <select id="sitperiodo" value={sitperiodo} onChange={sp => setSituacaoPeriodo(sp.target.value)}>
-          <option>--Selecione uma opção--</option>
+          <option value={0}>--Selecione uma opção--</option>
           {sitperiodos.map((item, index) => {
-            return <option key={index}>{item.nome}</option>
+            return <option key={index} value={item.id}>{item.nome}</option>
           })}
         </select>
       </div>
-
-      <div className="sidebar--idade">
-        <label>Idade:</label>
-        <select id="idade" value={idade} onChange={i => setIdade(i.target.value)}>
-          <option>--Selecione uma opção--</option>
-          <option>23 anos ou menos</option>
-          <option>De 24 à 29 anos</option>
-          <option>De 30 à 36 anos</option>
-          <option>37 anos ou mais</option>
-
-        </select>
-      </div>
+      <button onClick={buscarResultado}>Buscar dados</button>
     </div>
   )
 }
