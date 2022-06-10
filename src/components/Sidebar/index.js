@@ -100,6 +100,7 @@ export default function Sidebar({ campus, setCampus, campusList }) {
 
       <div className="sidebar--cota">
         <label>Perfil do Aluno:</label>
+        <br></br>
         <select className="sidebar--select-cota" value={cota} onChange={co => setCota(co.target.value)}>
           <option value={0}>--Selecione uma opção--</option>
           {cotas.map((item, index) => {
