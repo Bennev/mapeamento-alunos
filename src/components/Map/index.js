@@ -31,7 +31,7 @@ export default function Map({ setCampus, campusList }) {
           <Marker
             eventHandlers={{
               click: () => {
-                setCampus(item.slug)
+                setCampus(item.id)
               }
             }}
             key={index}
