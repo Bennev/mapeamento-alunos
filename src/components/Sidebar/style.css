@@ -1,24 +1,59 @@
+.sidebar--campus {
+  margin-top: 20px;
+}
+
+.sidebar--select-campus {
+  width: 205px;
+}
+
+.sidebar--curso {
+  margin-top: 20px;
+}
+
+.sidebar--select-curso {
+  width: 205px;
+}
+
+.sidebar--cota {
+  margin-top: 20px;
+}
+
+.sidebar--select-cota {
+  width: 205px;
+}
+
 .sidebar--nivel {
   margin-top: 20px;
+}
+
+.sidebar--select-nivel {
+  width: 205px;
 }
 
 .sidebar--perletivoinicial {
   margin-top: 20px;
 }
 
-.sidebar--qtdalunos {
-  margin-top: 20px;
+.sidebar--select-perletivoinicial {
+  width: 205px;
 }
 
 .sidebar--sitmatricula {
   margin-top: 20px;
 }
 
+.sidebar--select-sitmatricula {
+  width: 205px;
+}
+
 .sidebar--sitperiodo {
   margin-top: 20px;
 }
+.sidebar--select-sitperiodo {
+  width: 205px;
+}
 
-.sidebar--idade {
+.sidebar--button {
   margin-top: 20px;
 }
 

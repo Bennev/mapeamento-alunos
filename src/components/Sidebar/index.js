@@ -77,19 +77,10 @@ export default function Sidebar({ campus, setCampus, campusList }) {
 
   return (
     <div className="sidebar--container">
-      <div className="sidebar--curso">
-        <label>Curso:</label>
-        <select id="curso" value={curso} onChange={c => setCurso(c.target.value)}>
-          <option value={0}>--Selecione uma opção--</option>
-          {cursos.map((item, index) => {
-            return <option key={index} value={item.id}>{item.nome}</option>
-          })}
-        </select>
-      </div>
 
       <div className="sidebar--campus">
         <label>Campus:</label>
-        <select value={campus} onChange={ca => setCampus(ca.target.value)}>
+        <select className="sidebar--select-campus" value={campus} onChange={ca => setCampus(ca.target.value)}>
           <option value={0}>--Selecione uma opção--</option>
           {campusList.map((item, index) => {
             return <option key={index} value={item.id}>{item.nome}</option>
@@ -97,9 +88,19 @@ export default function Sidebar({ campus, setCampus, campusList }) {
         </select>
       </div>
 
+      <div className="sidebar--curso">
+        <label>Curso:</label>
+        <select className="sidebar--select-curso" value={curso} onChange={c => setCurso(c.target.value)}>
+          <option value={0}>--Selecione uma opção--</option>
+          {cursos.map((item, index) => {
+            return <option key={index} value={item.id}>{item.nome}</option>
+          })}
+        </select>
+      </div>
+
       <div className="sidebar--cota">
         <label>Perfil do Aluno:</label>
-        <select id="cota" value={cota} onChange={co => setCota(co.target.value)}>
+        <select className="sidebar--select-cota" value={cota} onChange={co => setCota(co.target.value)}>
           <option value={0}>--Selecione uma opção--</option>
           {cotas.map((item, index) => {
             return <option key={index} value={item.id}>{item.nome}</option>
@@ -109,7 +110,7 @@ export default function Sidebar({ campus, setCampus, campusList }) {
 
       <div className="sidebar--nivel">
         <label>Nivel:</label>
-        <select id="nivel" value={nivel} onChange={n => setNivel(n.target.value)}>
+        <select className="sidebar--select-nivel" value={nivel} onChange={n => setNivel(n.target.value)}>
           <option value={"--Selecione uma opção--"}>--Selecione uma opção--</option>
           {niveis.map((item, index) => {
             return <option key={index} value={item}>{item}</option>
@@ -119,7 +120,7 @@ export default function Sidebar({ campus, setCampus, campusList }) {
 
       <div className="sidebar--perletivoinicial">
         <label>Período Letivo Inicial: </label>
-        <select id="perletivoinicial" value={perletivoinicial} onChange={pli => setPeriodoLetivoInicial(pli.target.value)}>
+        <select className="sidebar--select-perletivoinicial" value={perletivoinicial} onChange={pli => setPeriodoLetivoInicial(pli.target.value)}>
           <option value={"--Selecione uma opção--"}>--Selecione uma opção--</option>
           {perletivoiniciais.map((item, index) => {
             return <option key={index} value={item}>{item}</option>
@@ -129,7 +130,7 @@ export default function Sidebar({ campus, setCampus, campusList }) {
 
       <div className="sidebar--sitmatricula">
         <label>Situação Matrícula:</label>
-        <select id="sitmatricula" value={sitmatricula} onChange={sm => setSituacaoMatricula(sm.target.value)}>
+        <select className="sidebar--select-sitmatricula" value={sitmatricula} onChange={sm => setSituacaoMatricula(sm.target.value)}>
           <option value={0}>--Selecione uma opção--</option>
           {sitmatriculas.map((item, index) => {
             return <option key={index} value={item.id}>{item.nome}</option>
@@ -139,17 +140,19 @@ export default function Sidebar({ campus, setCampus, campusList }) {
 
       <div className="sidebar--sitperiodo">
         <label>Situação Período:</label>
-        <select id="sitperiodo" value={sitperiodo} onChange={sp => setSituacaoPeriodo(sp.target.value)}>
+        <select className="sidebar--select-sitperiodo" value={sitperiodo} onChange={sp => setSituacaoPeriodo(sp.target.value)}>
           <option value={0}>--Selecione uma opção--</option>
           {sitperiodos.map((item, index) => {
             return <option key={index} value={item.id}>{item.nome}</option>
           })}
         </select>
       </div>
-      <button onClick={buscarResultado}>Buscar dados</button>
+
+      <button className="sidebar--button" onClick={buscarResultado}>Buscar Dados</button>
       {realizouPesquisa ? (
         <h2>Quantidade de Alunos: {alunos.length}</h2>
       ) : null}
+
     </div>
   )
 }
